@@ -133,10 +133,9 @@ FIELD RULES:
                     "name": "search_catalog",
                     "description": (
                         "Search the SHL catalog for assessments matching a query. "
-                        "IMPORTANT: call this multiple times with different queries to cover "
-                        "different assessment categories (e.g. once for skills/knowledge, "
-                        "once for cognitive/ability, once for personality). "
-                        "Use specific narrow queries, not one broad query."
+                        "IMPORTANT: call this multiple times with different narrow queries to cover "
+                        "different assessment categories (skills, cognitive, personality, simulation). "
+                        "Do NOT use one broad query — issue separate calls per category."
                     ),
                     "parameters": {
                         "type": "object",
@@ -144,12 +143,15 @@ FIELD RULES:
                             "query": {
                                 "type": "string",
                                 "description": (
-                                    "Specific search terms. Examples: "
-                                    "'Java programming knowledge', "
-                                    "'numerical reasoning ability graduate', "
-                                    "'OPQ personality leadership executive', "
-                                    "'live coding interview senior developer', "
-                                    "'entry level situational judgement'"
+                                    "Specific search terms matched to what you need. Use these patterns:\n"
+                                    "- Skills/knowledge: 'Java programming', 'financial accounting', 'networking implementation', 'Linux programming'\n"
+                                    "- Cognitive/ability: 'numerical reasoning', 'verbal reasoning', 'inductive reasoning', 'deductive reasoning', 'Verify G+'\n"
+                                    "- Personality/behaviour: 'OPQ personality', 'OPQ leadership report', 'OPQ32r'\n"
+                                    "- Simulations: 'contact center call simulation', 'SVAR spoken English US', 'customer service simulation'\n"
+                                    "- Live coding: 'smart interview live coding'\n"
+                                    "- Entry level: 'entry level customer service', 'entry level cashier', 'graduate scenarios situational judgement'\n"
+                                    "- Leadership: 'enterprise leadership report', 'OPQ leadership executive', 'HiPo high potential'\n"
+                                    "- Graduate: 'graduate scenarios', 'graduate financial', 'basic statistics graduate'"
                                 ),
                             },
                             "top_k": {
