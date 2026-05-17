@@ -1,7 +1,10 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from typing import List
 import os
+from dotenv import load_dotenv
+load_dotenv()  # picks up .env locally; no-op in production where env vars are injected directly
 from .agent import ConversationalAgent
 
 app = FastAPI(title="SHL Conversational Recommender API")
@@ -13,9 +16,14 @@ class Message(BaseModel):
 class ChatRequest(BaseModel):
     messages: List[Message]
 
-# Initialize agent globally. Note: in production, catalog path should be absolute or relative to project root
 CATALOG_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "shl_product_catalog.json")
 agent = ConversationalAgent(CATALOG_PATH)
+
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
+async def serve_ui():
+    html_path = os.path.join(os.path.dirname(__file__), "static", "index.html")
+    with open(html_path, "r", encoding="utf-8") as f:
+        return f.read()
 
 @app.get("/health")
 async def health_check():

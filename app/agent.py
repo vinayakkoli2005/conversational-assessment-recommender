@@ -109,7 +109,7 @@ Use the `search_catalog` tool whenever you need to find or verify assessments. C
 
         # Agentic loop: keep processing tool calls until the LLM stops issuing them
         response = await self.client.chat.completions.create(
-            model="meta-llama/llama-4-maverick",
+            model="meta-llama/llama-3.3-70b-instruct:free",
             messages=oai_messages,
             tools=tools,
             temperature=0.2,
@@ -141,7 +141,7 @@ Use the `search_catalog` tool whenever you need to find or verify assessments. C
 
             # Ask LLM again — it may issue more tool calls or produce final answer
             response = await self.client.chat.completions.create(
-                model="meta-llama/llama-4-maverick",
+                model="meta-llama/llama-3.3-70b-instruct:free",
                 messages=oai_messages,
                 tools=tools,
                 temperature=0.2,
@@ -151,7 +151,7 @@ Use the `search_catalog` tool whenever you need to find or verify assessments. C
         # Final structured output pass
         oai_messages.append(response_message)
         final_response = await self.client.chat.completions.create(
-            model="meta-llama/llama-4-maverick",
+            model="meta-llama/llama-3.3-70b-instruct:free",
             messages=oai_messages,
             response_format={
                 "type": "json_schema",
