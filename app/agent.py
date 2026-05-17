@@ -21,8 +21,11 @@ MAX_TURNS = 8
 class ConversationalAgent:
     def __init__(self, catalog_path: str):
         self.retriever = CatalogRetriever(catalog_path)
-        api_key = os.environ.get("OPENAI_API_KEY")
-        self.client = AsyncOpenAI(api_key=api_key) if api_key else None
+        api_key = os.environ.get("OPENROUTER_API_KEY")
+        self.client = AsyncOpenAI(
+            api_key=api_key,
+            base_url="https://openrouter.ai/api/v1",
+        ) if api_key else None
 
         self.system_prompt = """You are a conversational AI agent for SHL Labs, designed to recommend SHL Individual Test Solutions to hiring managers and recruiters.
 Your goal is to guide the user from a vague intent to a grounded shortlist of SHL assessments.
@@ -106,7 +109,7 @@ Use the `search_catalog` tool whenever you need to find or verify assessments. C
 
         # Agentic loop: keep processing tool calls until the LLM stops issuing them
         response = await self.client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="meta-llama/llama-4-maverick",
             messages=oai_messages,
             tools=tools,
             temperature=0.2,
@@ -138,7 +141,7 @@ Use the `search_catalog` tool whenever you need to find or verify assessments. C
 
             # Ask LLM again — it may issue more tool calls or produce final answer
             response = await self.client.chat.completions.create(
-                model="gpt-4o-mini",
+                model="meta-llama/llama-4-maverick",
                 messages=oai_messages,
                 tools=tools,
                 temperature=0.2,
@@ -148,7 +151,7 @@ Use the `search_catalog` tool whenever you need to find or verify assessments. C
         # Final structured output pass
         oai_messages.append(response_message)
         final_response = await self.client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="meta-llama/llama-4-maverick",
             messages=oai_messages,
             response_format={
                 "type": "json_schema",
